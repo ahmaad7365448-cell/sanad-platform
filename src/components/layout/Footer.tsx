@@ -1,100 +1,88 @@
+"use client";
+
 import Link from "next/link";
-import { MapPin, Phone, Mail, Package, ArrowLeft } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Hexagon, Heart, MapPin, Phone, Mail } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const { t } = useLanguage();
+
+  if (pathname?.startsWith("/auth") || pathname?.startsWith("/expat")) return null;
+
   return (
-    <footer className="bg-[#020617] border-t border-slate-800/60 pt-16 pb-8 relative overflow-hidden">
+    <footer className="border-t border-slate-800/80 bg-[#020617] pt-16 pb-8 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
           
-          {/* العمود الأول: عن المنصة */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500">
-                <Package className="h-5 w-5 text-white" />
+          {/* العمود الأول: الشعار والوصف */}
+          <div className="flex flex-col items-start text-start">
+            <Link href="/" className="flex items-center gap-3 mb-6 group">
+              <div className="relative flex h-10 w-10 items-center justify-center bg-slate-900 rounded-xl border border-emerald-500/30 shadow-inner">
+                <Hexagon className="absolute h-7 w-7 text-emerald-400" strokeWidth={1.5} />
+                <Heart className="relative h-3 w-3 text-cyan-400 fill-cyan-400/20" strokeWidth={2} />
               </div>
-              <span className="text-2xl font-bold tracking-wide text-white">سَنَد</span>
+              <span className="text-2xl font-black text-white tracking-widest uppercase">
+                {t.brand.name}
+              </span>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              منظومة SaaS المؤسسية الأولى لتمكين المغتربين السوريين من دعم عائلاتهم في الداخل بأمان وسرعة.
+            <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
+              {t.footer.desc}
             </p>
           </div>
 
-          {/* العمود الثاني: المنصة */}
+          {/* العمود الثاني: المنصة (الدائرة الحمراء الوسطى) */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">المنصة</h4>
-            <ul className="space-y-4">
-              <li>
-                <Link href="/expat" className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 text-sm group">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  باقات المغتربين
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 text-sm group">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  الخدمات المتاحة
-                </Link>
-              </li>
+            <h3 className="text-white font-bold text-lg mb-6 flex items-center gap-2">{t.footer.platform}</h3>
+            <ul className="space-y-4 text-sm font-medium text-slate-400">
+              <li><Link href="/services" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.nav.services}</Link></li>
+              <li><Link href="/#how-it-works" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.nav.howItWorks}</Link></li>
+              <li><Link href="/about" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.nav.about}</Link></li>
             </ul>
           </div>
 
-          {/* العمود الثالث: السياسات والدعم */}
+          {/* العمود الثالث: السياسات والدعم (الدائرة الحمراء اليمنى) */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">السياسات والدعم</h4>
-            <ul className="space-y-4">
-              <li>
-                <Link href="/privacy" className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 text-sm group">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  سياسة الخصوصية
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 text-sm group">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  شروط الاستخدام
-                </Link>
-              </li>
+            <h3 className="text-white font-bold text-lg mb-6 flex items-center gap-2">{t.footer.policies}</h3>
+            <ul className="space-y-4 text-sm font-medium text-slate-400">
+              <li><Link href="/privacy" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.footer.privacy}</Link></li>
+              <li><Link href="/terms" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.footer.terms}</Link></li>
+              <li><Link href="/rate" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.footer.rateUs}</Link></li>
+              <li><Link href="/report" className="hover:text-emerald-400 transition-colors flex items-center gap-2">{t.footer.reportIssue}</Link></li>
+              <li><Link href="/donate" className="hover:text-emerald-400 transition-colors flex items-center gap-2 font-bold">{t.footer.donateBtn}</Link></li>
             </ul>
           </div>
 
-          {/* العمود الرابع: تواصل معنا */}
+          {/* العمود الرابع: تواصل معنا (جزء من الدائرة الحمراء الوسطى) */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">تواصل معنا</h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-slate-400 text-sm">
-                <MapPin className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>تركيا، بورصا، عثمان غازي<br/>16165</span>
+            <h3 className="text-white font-bold text-lg mb-6 flex items-center gap-2">{t.nav.contact}</h3>
+            <ul className="space-y-5 text-sm font-medium text-slate-400 mb-6">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>{t.footer.address}</span>
               </li>
-              <li>
-                <a href="https://wa.me/905423456316" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-slate-400 hover:text-emerald-400 transition-colors text-sm" dir="ltr">
-                  <span className="text-right w-full">+90 542 345 63 16</span>
-                  <Phone className="w-5 h-5 text-emerald-400 shrink-0" />
-                </a>
+              <li className="flex items-center gap-3" dir="ltr">
+                <Phone className="w-5 h-5 text-emerald-500 shrink-0" />
+                <span className="w-full">+90 542 345 63 16</span>
               </li>
-              <li>
-                <a href="mailto:aborame5230200@icloud.com" className="flex items-center gap-3 text-slate-400 hover:text-emerald-400 transition-colors text-sm break-all">
-                  <Mail className="w-5 h-5 text-emerald-400 shrink-0" />
-                  aborame5230200@icloud.com
-                </a>
+              <li className="flex items-center gap-3" dir="ltr">
+                <Mail className="w-5 h-5 text-emerald-500 shrink-0" />
+                <span className="w-full text-xs">aborame5230200@icloud.com</span>
               </li>
             </ul>
           </div>
-
         </div>
-
-        {/* الحقوق السفلية */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 text-sm">
-            © {new Date().getFullYear()} منصة سَنَد المؤسسية. كافة الحقوق محفوظة.
+        
+        {/* حقوق النشر */}
+        <div className="pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-slate-500 text-xs font-medium">
+            {t.footer.rights}
           </p>
-          <div className="flex gap-4">
-            <a href="mailto:aborame5230200@icloud.com" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all">
-              <Mail className="w-4 h-4" />
-            </a>
-            <a href="https://wa.me/905423456316" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all">
-              <Phone className="w-4 h-4" />
-            </a>
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-600 uppercase">
+            <Hexagon className="w-4 h-4" />
+            {t.brand.subtitle}
           </div>
         </div>
       </div>

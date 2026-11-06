@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "how_it_works": "How it works",
+    "about": "About Sanad",
+    "join": "Join Us"
+  },
+  "login": {
+    "title": "Login",
+    "welcome": "Welcome back to Sanad Portal.",
+    "email_label": "Email Address",
+    "password_label": "Password",
+    "forgot_password": "Forgot password?",
+    "login_button": "Secure Login",
+    "or_continue": "Or continue with",
+    "back_home": "Back to Home",
+    "required_field": "This field is required"
+  },
+  "sidebar": {
+    "quote": "Because you are the safety in a time of exile, and the hand that extends with goodness.",
+    "giving": "We are here to deliver your giving.",
+    "secure": "Encrypted Security",
+    "secure_desc": "Your data is protected by the highest standards",
+    "fast": "Fast Response",
+    "fast_desc": "Sanad team is with you around the clock"
+  }
+}

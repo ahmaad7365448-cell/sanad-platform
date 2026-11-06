@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "services": "Gurbetçi Paketleri",
+    "howItWorks": "Nasıl Çalışır",
+    "about": "Sanad Hakkında",
+    "login": "Sanad Ol"
+  },
+  "hero": {
+    "title": "Basit ve Şeffaf İş Süreci",
+    "subtitle": "Ailenize güvenle destek ulaştırmanızdan sizi ayıran üç kolay adım."
+  }
+}
