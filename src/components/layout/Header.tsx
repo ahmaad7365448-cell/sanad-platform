@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Menu, X, User as UserIcon, Hexagon, Heart, Sparkles, Globe, 
-  Home, PackageSearch, Layers, Info, PhoneCall, ChevronDown, 
-  ShieldCheck, FileText, Gift, Gamepad2, ShoppingBag
+  Menu, X, User as UserIcon, Hexagon, Heart, Globe, 
+  Home, Layers, Info, PhoneCall, ShieldCheck, FileText
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
@@ -17,8 +16,6 @@ export default function Header() {
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
-  const [isDesktopProductsOpen, setIsDesktopProductsOpen] = useState(false);
 
   const [user, setUser] = useState<any>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -58,7 +55,6 @@ export default function Header() {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    setIsProductsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -72,7 +68,6 @@ export default function Header() {
 
   const closeMenu = () => {
     setIsMobileMenuOpen(false);
-    setIsProductsOpen(false);
   };
 
   const languages = [
@@ -80,12 +75,6 @@ export default function Header() {
     { code: 'EN', name: 'English' },
     { code: 'TR', name: 'Türkçe' },
     { code: 'DE', name: 'Deutsch' }
-  ];
-
-  const productCategories = [
-    { name: "بطاقات الهدايا", href: "/products/gift-cards", icon: <Gift className="w-4 h-4" /> },
-    { name: "شحن الألعاب", href: "/products/gaming", icon: <Gamepad2 className="w-4 h-4" /> },
-    { name: "التسوق للعائلة", href: "/products/family-shopping", icon: <ShoppingBag className="w-4 h-4" /> }
   ];
 
   const initialLetter = userName ? userName.charAt(0).toUpperCase() : "S";
@@ -118,50 +107,14 @@ export default function Header() {
           {/* روابط التنقل */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-slate-300 relative">
             <Link href="/" className="hover:text-emerald-400 transition-colors">{t.nav?.home || "الرئيسية"}</Link>
-            
-            <div 
-              className="relative group py-6 cursor-pointer"
-              onMouseEnter={() => setIsDesktopProductsOpen(true)}
-              onMouseLeave={() => setIsDesktopProductsOpen(false)}
-            >
-              <div className="flex items-center gap-1 hover:text-emerald-400 transition-colors outline-none">
-                {t.nav?.products || "منتجاتنا"}
-                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDesktopProductsOpen ? "rotate-180 text-emerald-400" : ""}`} />
-              </div>
-              
-              <AnimatePresence>
-                {isDesktopProductsOpen && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-16 left-1/2 -translate-x-1/2 w-48 bg-slate-900/95 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl z-50 flex flex-col py-2"
-                  >
-                    {productCategories.map((cat, idx) => (
-                      <Link 
-                        key={idx} 
-                        href={cat.href}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:text-emerald-400 hover:bg-slate-800/80 transition-colors"
-                      >
-                        <span className="text-emerald-500/70">{cat.icon}</span>
-                        {cat.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
             <Link href="/services" className="hover:text-emerald-400 transition-colors">{t.nav?.services || "خدماتنا"}</Link>
             <Link href="/about" className="hover:text-emerald-400 transition-colors">{t.nav?.about || "عن سَنَد"}</Link>
             <Link href="/contact" className="hover:text-emerald-400 transition-colors">{t.nav?.contact || "تواصل معنا"}</Link>
           </nav>
 
-          {/* الأزرار الجانبية (شاشات كبيرة + موبايل) */}
+          {/* الأزرار الجانبية */}
           <div className="flex items-center gap-2 sm:gap-4">
             
-            {/* عرض الاسم والصورة للموبايل (إذا كان مسجلاً) */}
             {user && (
               <Link href="/expat/profile" className="md:hidden flex items-center gap-2 rounded-xl bg-slate-800/80 p-1 px-3 border border-emerald-500/30 hover:border-emerald-500 shadow-sm transition-all">
                 <div className="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
@@ -181,7 +134,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* زر اللغة */}
             <div className="relative">
               <button 
                 onClick={() => setIsLangOpen(!isLangOpen)} 
@@ -216,7 +168,6 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
-            {/* عرض الاسم والصورة للشاشات الكبيرة */}
             <div className="hidden md:block">
               {user ? (
                 <Link href="/expat/profile" className="flex items-center gap-3 rounded-xl bg-slate-800/80 p-1.5 px-4 border border-emerald-500/30 hover:border-emerald-500 hover:bg-slate-800 transition-all shadow-md">
@@ -286,45 +237,6 @@ export default function Header() {
             <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 scrollbar-hide">
               <div className="flex flex-col gap-1.5">
                 <MobileNavLink href="/" icon={<Home className="w-5 h-5 text-emerald-500" />} text={t.nav?.home || "الرئيسية"} onClick={closeMenu} />
-                
-                <div className="flex flex-col overflow-hidden rounded-2xl bg-slate-900/30">
-                  <button 
-                    onClick={() => setIsProductsOpen(!isProductsOpen)}
-                    className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/5 active:bg-white/10 transition-colors group outline-none"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/5 flex items-center justify-center shadow-inner group-hover:border-emerald-500/30 transition-colors">
-                        <PackageSearch className="w-5 h-5 text-emerald-500" />
-                      </div>
-                      <span className="text-lg font-bold text-slate-200 group-hover:text-emerald-400 transition-colors">{t.nav?.products || "منتجاتنا"}</span>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isProductsOpen ? "rotate-180 text-emerald-400" : ""}`} />
-                  </button>
-                  
-                  <AnimatePresence>
-                    {isProductsOpen && (
-                      <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="flex flex-col px-12 pb-3 overflow-hidden"
-                      >
-                        {productCategories.map((cat, idx) => (
-                          <Link 
-                            key={idx} 
-                            href={cat.href} 
-                            onClick={closeMenu}
-                            className="flex items-center gap-3 py-3 border-l-2 border-slate-700 hover:border-emerald-500 pl-4 pr-2 text-slate-400 hover:text-emerald-400 transition-all"
-                          >
-                            {cat.icon}
-                            <span className="font-medium text-sm">{cat.name}</span>
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
                 <MobileNavLink href="/services" icon={<Layers className="w-5 h-5 text-emerald-500" />} text={t.nav?.services || "خدماتنا"} onClick={closeMenu} />
                 <MobileNavLink href="/about" icon={<Info className="w-5 h-5 text-emerald-500" />} text={t.nav?.about || "عن سَنَد"} onClick={closeMenu} />
                 <MobileNavLink href="/contact" icon={<PhoneCall className="w-5 h-5 text-emerald-500" />} text={t.nav?.contact || "تواصل معنا"} onClick={closeMenu} />
