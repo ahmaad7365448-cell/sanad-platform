@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Send, MessageSquare, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageSquare, ArrowRight, ArrowLeft, Loader2, Facebook, Instagram } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const CONTACT_TEXTS: Record<string, any> = {
@@ -16,6 +16,7 @@ const CONTACT_TEXTS: Record<string, any> = {
     hqAddress: "تركيا، بورصا، عثمان غازي",
     phone: "رقم الهاتف (واتساب)",
     emailLabel: "البريد الإلكتروني",
+    socialLinks: "منصاتنا الاجتماعية",
     formTitle: "أرسل لنا رسالة",
     fullName: "الاسم الكامل",
     namePlaceholder: "الاسم الثلاثي",
@@ -43,6 +44,7 @@ const CONTACT_TEXTS: Record<string, any> = {
     hqAddress: "Turkey, Bursa, Osmangazi",
     phone: "Phone Number (WhatsApp)",
     emailLabel: "Email Address",
+    socialLinks: "Our Social Media",
     formTitle: "Send Us a Message",
     fullName: "Full Name",
     namePlaceholder: "John Doe",
@@ -70,6 +72,7 @@ const CONTACT_TEXTS: Record<string, any> = {
     hqAddress: "Türkiye, Bursa, Osmangazi",
     phone: "Telefon Numarası (WhatsApp)",
     emailLabel: "E-posta Adresi",
+    socialLinks: "Sosyal Medya",
     formTitle: "Bize Mesaj Gönderin",
     fullName: "Ad Soyad",
     namePlaceholder: "Ahmet Yılmaz",
@@ -97,6 +100,7 @@ const CONTACT_TEXTS: Record<string, any> = {
     hqAddress: "Türkei, Bursa, Osmangazi",
     phone: "Telefonnummer (WhatsApp)",
     emailLabel: "E-Mail Adresse",
+    socialLinks: "Unsere sozialen Medien",
     formTitle: "Nachricht senden",
     fullName: "Vollständiger Name",
     namePlaceholder: "Max Mustermann",
@@ -131,6 +135,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
 
+  // تحديث دالة الإرسال لتوجه الطلب إلى مجلد الـ API الجديد
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -186,6 +191,7 @@ export default function ContactPage() {
           {/* معلومات التواصل */}
           <div className={`lg:w-5/12 bg-gradient-to-br from-emerald-950/80 to-slate-950 p-10 lg:p-14 relative border-b lg:border-b-0 ${isRtl ? 'lg:border-l' : 'lg:border-r'} border-white/5`}>
             <h3 className="text-2xl font-bold text-white mb-8">{ui.contactInfo}</h3>
+            
             <div className="space-y-8 mb-12">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
@@ -215,6 +221,23 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+
+            {/* روابط منصات التواصل الاجتماعي (الواتساب، الفيسبوك، الانستغرام) */}
+            <div className="pt-8 border-t border-slate-800">
+              <h4 className="text-white font-bold mb-4">{ui.socialLinks}</h4>
+              <div className="flex gap-4">
+                <a href="https://wa.me/905423456316" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 hover:bg-emerald-500 hover:text-slate-900 transition-colors" title="WhatsApp">
+                  <MessageSquare className="w-5 h-5" />
+                </a>
+                <a href="https://www.facebook.com/share/1W3f3jjvhf/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-500 hover:text-white transition-colors" title="Facebook">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="https://www.instagram.com/ahmed_abo_rame?rpxt=eTJjOTVpaDhpYmNw&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-pink-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-500 hover:text-white hover:border-transparent transition-all" title="Instagram">
+                  <Instagram className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
           </div>
 
           {/* نموذج التواصل */}
