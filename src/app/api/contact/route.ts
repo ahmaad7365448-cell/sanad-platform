@@ -9,8 +9,11 @@ export async function POST(request: Request) {
     const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      return NextResponse.json({ success: false, error: 'Telegram keys missing in env' }, { status: 500 });
+      console.error("Missing Telegram Environment Variables");
+      return NextResponse.json({ success: false, error: 'Env keys missing' }, { status: 500 });
     }
+
+    const ticketId = `MSG-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const subjectMap: Record<string, string> = {
       inquiry: "استفسار عام",
@@ -19,14 +22,15 @@ export async function POST(request: Request) {
       other: "أخرى"
     };
 
+    // Removed Markdown to prevent parsing errors
     const telegramMessage = `
-📩 *رسالة تواصل جديدة من سَنَد*
+📬 رسالة تواصل جديدة (${ticketId})
 
-👤 *الاسم:* ${name}
-📧 *البريد:* ${email}
-🏷 *الموضوع:* ${subjectMap[subject] || subject}
+👤 الاسم: ${name}
+📧 البريد: ${email}
+🏷️ الموضوع: ${subjectMap[subject] || subject}
 
-💬 *الرسالة:*
+📝 نص الرسالة:
 ${message}
     `;
 
@@ -36,14 +40,19 @@ ${message}
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: telegramMessage,
-        parse_mode: 'Markdown',
       }),
     });
 
-    if (!telegramResponse.ok) throw new Error("Failed to reach Telegram API");
+    const telegramData = await telegramResponse.json();
 
-    return NextResponse.json({ success: true, message: 'Message sent successfully' });
+    if (!telegramResponse.ok) {
+      console.error("Telegram Error Response:", telegramData);
+      throw new Error(`Telegram API Error: ${telegramData.description || 'Unknown error'}`);
+    }
+
+    return NextResponse.json({ success: true, ticketId });
   } catch (error: any) {
+    console.error("Server Route Error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
