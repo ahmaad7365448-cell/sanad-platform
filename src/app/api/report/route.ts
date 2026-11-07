@@ -9,6 +9,7 @@ export async function POST(request: Request) {
     const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      console.error("Missing Telegram Environment Variables");
       return NextResponse.json({ success: false, error: 'Env keys missing' }, { status: 500 });
     }
 
@@ -26,16 +27,17 @@ export async function POST(request: Request) {
       urgent: "🔴 عاجلة جداً"
     };
 
+    // Fix: Removed Markdown asterisks and special characters that cause Telegram API 400 errors if not properly escaped
     const telegramMessage = `
-🚨 *بلاغ دعم فني (${ticketId})*
+🚨 بلاغ دعم فني (${ticketId})
 
-👤 *الاسم:* ${name}
-📧 *البريد:* ${email}
-⚠️ *النوع:* ${typeMap[type] || type}
-📊 *الأهمية:* ${priorityMap[priority] || priority}
-🌍 *لغة العميل:* ${lang}
+👤 الاسم: ${name}
+📧 البريد: ${email}
+⚠️ النوع: ${typeMap[type] || type}
+📊 الأهمية: ${priorityMap[priority] || priority}
+🌍 لغة العميل: ${lang}
 
-📝 *الوصف:*
+📝 الوصف:
 ${description}
     `;
 
@@ -45,14 +47,19 @@ ${description}
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: telegramMessage,
-        parse_mode: 'Markdown',
       }),
     });
 
-    if (!telegramResponse.ok) throw new Error("Telegram API Error");
+    const telegramData = await telegramResponse.json();
+
+    if (!telegramResponse.ok) {
+      console.error("Telegram Error Response:", telegramData);
+      throw new Error(`Telegram API Error: ${telegramData.description || 'Unknown error'}`);
+    }
 
     return NextResponse.json({ success: true, ticketId });
   } catch (error: any) {
+    console.error("Server Route Error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
